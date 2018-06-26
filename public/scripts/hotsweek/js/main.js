@@ -21,14 +21,26 @@ var fetchData = function (url, params = null) {
 var parseFields = function (data) {
     var parsedObj = {}
     for (var i in data) {
-        parsedObj[i] = {}
-        for (var j in presets) {
-            if (data[i][j] !== undefined) {
-                parsedObj[i][presets[j]] = data[i][j]
-            }
-        }
+		if (i === 'PlayerBase') {
+			parsedObj[i] = matchPresets(data[i])
+		} else {
+			parsedObj[i] = {}
+			for (var j in data[i]) {
+				parsedObj[i][j] = matchPresets(data[i][j])
+			}
+		}
     }
     return parsedObj
+}
+
+var matchPresets = function (_data) {
+	var _parsedObj = {}
+	for (var i in presets) {
+		if (_data[i] !== undefined) {
+			_parsedObj[presets[i]] = _data[i]
+		}
+	}
+	return _parsedObj
 }
 
 Promise.all([
@@ -40,20 +52,33 @@ Promise.all([
     1: dataGlobal,
     2: dataPersonal
 }) {
+	window.playerInfo = dataPersonal.PlayerInfo
     window.presets = presets
     window.dataGlobal = parseFields(dataGlobal)
-    window.playerInfo = dataPersonal.PlayerInfo
-    window.dataPersonal = parseFields(dataPersonal)
-    console.log(dataGlobal)
-    console.log(dataPersonal)
+	window.dataPersonal = {}
+	window.dataPersonal = parseFields(dataPersonal)
+    console.log(window.dataGlobal)
+    console.log(window.dataPersonal)
     main()
 })
 
 var main = function () {
     // do someting
+	counter = window.counter
+	events = window.events
     document.write('<h2>Player: ' + playerInfo.name + ' (from region ' + playerInfo.region + ')</h2>' + "<br />")
-    for (var i in functions) {
-        var item = functions[i]
-        document.write(item[0][lang] + ': ' + item[1]() + "<br />"); 
+    for (var i in counter) {
+        var item = counter[i]
+		var title = item[0]
+		var content = item[1]()
+        document.write(title[lang] + ': ' + content[lang] + "<br />"); 
     }
+	for (var i in events) {
+        var item = events[i]
+		var title = item[0]
+		var content = item[1]()
+		if (content !== false) {
+			document.write(title[lang] + ': ' + content[lang] + "<br />"); 
+		}
+	}
 }
