@@ -39,6 +39,18 @@ var counter = {
 			]
 		}
 	],
+	'WeekMostUsed': [
+		['Most used', '使用最多的英雄'],
+		function () {
+			var item = dataPersonal.PlayerHeroes._sumMax.game_total
+			var heroID = item[0]
+			var times = item[1]
+			return [
+				'Hero ' + heroID + ' was used ' + times + ' times',
+				'英雄 ' + heroID + ' 被使用了 ' + times + ' 次'
+			]
+		}
+	],
 }
 
 var events = {

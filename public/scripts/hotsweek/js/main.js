@@ -25,12 +25,25 @@ var parseFields = function (data) {
 			parsedObj[i] = matchPresets(data[i])
 		} else {
 			parsedObj[i] = {}
+			var _sumMax = {}
 			for (var j in data[i]) {
 				parsedObj[i][j] = matchPresets(data[i][j])
+				_sumMax = findMax(_sumMax, j, data[i][j])
 			}
+			parsedObj[i]['_sumMax'] = _sumMax
 		}
     }
     return parsedObj
+}
+
+var findMax = function (_sumMax, index, _data) {
+	for (var i in presets) {
+		var field = presets[i]
+		if (_data[i] !== undefined && (_sumMax[field] === undefined || _sumMax[field][1] < _data[i].sum)) {
+			_sumMax[field] = [index, _data[i].sum]
+		}
+	}
+	return _sumMax
 }
 
 var matchPresets = function (_data) {
@@ -55,7 +68,6 @@ Promise.all([
 	window.playerInfo = dataPersonal.PlayerInfo
     window.presets = presets
     window.dataGlobal = parseFields(dataGlobal)
-	window.dataPersonal = {}
 	window.dataPersonal = parseFields(dataPersonal)
     console.log(window.dataGlobal)
     console.log(window.dataPersonal)
@@ -71,14 +83,14 @@ var main = function () {
         var item = counter[i]
 		var title = item[0]
 		var content = item[1]()
-        document.write(title[lang] + ': ' + content[lang] + "<br />"); 
+        document.write(title[lang] + ': ' + content[lang] + "<br />")
     }
 	for (var i in events) {
         var item = events[i]
 		var title = item[0]
 		var content = item[1]()
 		if (content !== false) {
-			document.write(title[lang] + ': ' + content[lang] + "<br />"); 
+			document.write(title[lang] + ': ' + content[lang] + "<br />")
 		}
 	}
 }
