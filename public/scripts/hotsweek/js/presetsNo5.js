@@ -2,7 +2,7 @@ var counter = {
     'GamesOfSupport': [
         ['Plays Support in this week', '治疗英雄周局数'],
         function () {
-            var games=Math.round(adataPersonal.PlayerBase.PlaysSupport.sum)
+            var games=Math.round(dataPersonal.PlayerBase.PlaysSupport.sum)
             return[
                 games+'times',
                 games+'局'
@@ -282,11 +282,11 @@ var events = {
         function () {
             var Collected=dataPersonal.PlayerBase.BlackheartDoubloonsCollected.sum
             var TurnedIn=dataPersonal.PlayerBase.BlackheartDoubloonsTurnedIn.sum
-            var limit=TurnedIn<0.5*Collected
+            var limit=TurnedIn<0.6*Collected
             return limit ?
                 [
-                    'In the map of the Black Heart Bay, you should look for the opportunity to turn In the Doubloons instead of squatting in your hands and finally losing them.',
-                    '黑心湾地图中，你应该找机会把收集到的达布隆币上交，而不是攥在手中到最后失去。'
+                    'In the map of the Black Heart Bay,you collected '+Collected+' Doubloons coins '+', but you only successfully turned in '+TurnedIn+' Doubloons coins, you should look for more opportunities to turn in',
+                    '黑心湾地图中，你收集了'+Collected+'个达布隆币'+',但是你只成功上交了'+TurnedIn+'个达布隆币，你应该多寻找机会上交'
                 ] : false
         }
     ],
@@ -300,8 +300,8 @@ var events = {
             var limit=Collected>0.8*Collected_gol&&Damage<0.5*Damage_gol
             return limit ?
                 [
-                    'In the Curse Valley map, you should use the curse time to get the most benefits, such as pushing the line, pushing the tower, and so on..',
-                    '诅咒谷地图中，要善用诅咒时间来获取最大的诅咒伤害，比如跟推吃线、推塔等等。'
+                    'In the Curse Valley map, Your curse damage is '+Damage+', and the global average is '+Damage_gol+'. Use the curse time to get the maximum curse damage, such as pushing the line, pushing the tower, etc..',
+                    '诅咒谷地图中，你的诅咒伤害是'+Damage+',而全球平均水平是'+Damage_gol+'要善用诅咒时间来获取最大的诅咒伤害，比如跟推吃线、推塔等等。'
                 ] : false
         }
     ]
